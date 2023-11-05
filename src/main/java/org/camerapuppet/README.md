@@ -31,6 +31,7 @@ the parts on the **left** side of the puppet body.
 2. You must have a singular skin tone
 3. The background must be static 
 4. Only one person is allowed in-frame
+5. Must have decent lighting on face
 
 ### Out of Current Scope:
 * bendable puppet parts (joints)

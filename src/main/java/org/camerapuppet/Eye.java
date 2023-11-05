@@ -14,4 +14,62 @@ public class Eye {
     private Eyebrow eyebrow;
     private Integer startDistanceToEyebrow;
     private Integer distanceToEyebrow;
+
+    public Eye() {}
+
+    public Point getCenter() {
+        return center;
+    }
+
+    public void setCenter(Point center) {
+        this.center = center;
+    }
+
+    public Integer getDiameter() {
+        return diameter;
+    }
+
+    public void setDiameter(Integer diameter) {
+        this.diameter = diameter;
+    }
+
+    public Integer getPupilDiameter() {
+        return pupilDiameter;
+    }
+
+    public void setPupilDiameter(Integer pupilDiameter) {
+        this.pupilDiameter = pupilDiameter;
+    }
+
+    public Integer getOpenness() {
+        return openness;
+    }
+
+    public void setOpenness(Integer openness) {
+        this.openness = openness;
+    }
+
+    public Eyebrow getEyebrow() {
+        return eyebrow;
+    }
+
+    public void setEyebrow(Eyebrow eyebrow) {
+        this.eyebrow = eyebrow;
+    }
+
+    public Integer getStartDistanceToEyebrow() {
+        return startDistanceToEyebrow;
+    }
+
+    public void setStartDistanceToEyebrow(Integer startDistanceToEyebrow) {
+        this.startDistanceToEyebrow = startDistanceToEyebrow;
+    }
+
+    public Integer getDistanceToEyebrow() {
+        return distanceToEyebrow;
+    }
+
+    public void setDistanceToEyebrow(Integer distanceToEyebrow) {
+        this.distanceToEyebrow = distanceToEyebrow;
+    }
 }

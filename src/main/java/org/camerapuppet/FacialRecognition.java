@@ -1,29 +1,40 @@
 package org.camerapuppet;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FacialRecognition {
 
-    BufferedImage originalImage;
+    private BufferedImage originalImage;
+    private BufferedImage treatedImage;
 
     public FacialRecognition(BufferedImage image) {
         originalImage = image;
+    }
+    public FacialRecognition() {}
+
+    public void setImage(BufferedImage image) {
+        originalImage = ImageWork.copyImage(image);
     }
 
     /**
      * Make a copy of our image and modify it to show where the eyes,
      * mouth, and skin is on the image.
-     * @param image
      * @return
      */
     public BufferedImage treatImage() {
-        BufferedImage treatedImage = ImageWork.copyImage(originalImage);
+        treatedImage = ImageWork.convertImageToFindFace(originalImage);
+        return treatedImage;
+    }
+    public BufferedImage treatImage(BufferedImage image) {
+        setImage(image);
+        return treatImage();
+    }
 
-        List<Point> nearBlacks = new ArrayList<>();
-        List<Point> nearWhites = new ArrayList<>();
+    public FaceData recognize(BufferedImage image) {
+        setImage(image);
+        return recognize();
+    }
+    public FaceData recognize() {
 
         // Scan the image for cases of near-black and near-white
 
@@ -40,7 +51,7 @@ public class FacialRecognition {
         // Highlight the skin in the treated image
 
         // Return the treated image
-        return treatedImage;
+        return null;
 
     }
 }

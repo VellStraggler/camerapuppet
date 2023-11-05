@@ -44,7 +44,7 @@ public class ImageWork {
     }
     public static BufferedImage retrieveImage(String path) {
         try {
-            return ImageIO.read(new File(path + ".png"));
+            return ImageIO.read(new File(path +".jpg"));
         } catch (IOException e) {
             p("Unable to read image with path: " + path);
             return null;
@@ -67,6 +67,107 @@ public class ImageWork {
     /* Reduces the image to only two colors: black and white */
     public static BufferedImage convertImageToBinary(BufferedImage image) {
         return convertImage(image, BufferedImage.TYPE_BYTE_BINARY);
+    }
+    public static BufferedImage convertImageToFindFace(BufferedImage originalImage) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
+        // Create a new BufferedImage to return
+        BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        RGB brightestColor = getBrightestColor(originalImage, 10);
+        RGB changeRequired = new RGB(0,0,0);
+        boolean changeIt = false;
+        RGB averageColor = getAverageColor(originalImage, 10);
+        if (brightestColor.compareTo(new RGB(60,60,60)) < 0) {
+            // This average color is a certain distance away from a neutral gray,
+            // which the supposed perfect picture would have as an average;
+            changeRequired = new RGB(RGB.MID-averageColor.red,
+                                     RGB.MID-averageColor.green,
+                                     RGB.MID-averageColor.blue);
+            changeIt = true;
+        }
+
+        // Iterate through each pixel
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                RGB color = new RGB(originalImage.getRGB(x, y));
+                color.add(changeRequired);
+                int contrast = 10;
+                color.red = increaseContrast(color.red, contrast);
+                color.green = increaseContrast(color.green, contrast);
+                color.blue = increaseContrast(color.blue, contrast);
+
+                if (closeEnough((int)(color.red/3.0), color.green) && closeEnough(color.green,color.blue)) {
+                    color.red = 0; color.blue = 0; color.green = 0;
+                } else {
+                    color.red = 255;
+                    color.green = 255;
+                    color.blue = 255;
+                }
+
+                newImage.setRGB(x, y, color.getIntValue());
+            }
+        }
+        return newImage;
+    }
+    private static boolean closeEnough(int a, int b) {
+        return Math.abs(a - b) < 25;
+    }
+
+    /** The number that the total amount of pixels is divided by is actually
+     * the sampleDivider squared.
+     * @param image
+     * @param sampleDivider
+     * @return
+     */
+    public static RGB getAverageColor(BufferedImage image, int sampleDivider) {
+        // get estimated average color;
+        RGB avgColor = new RGB(0,0,0);
+        for (int y = 0; y < image.getHeight(); y+= sampleDivider) {
+            for (int x = 0; x < image.getWidth(); x+= sampleDivider) {
+                avgColor.add(new RGB(image.getRGB(x, y)));
+            }
+        }
+        int total = (int)(image.getHeight() * image.getWidth() * .01);
+        avgColor.red = avgColor.red/total;
+        avgColor.green = avgColor.green/total;
+        avgColor.blue = avgColor.blue/total;
+        return avgColor;
+    }
+    public static RGB getBrightestColor(BufferedImage image, int sampleDivider) {
+        RGB maxColor = new RGB(0,0,0);
+        for (int y = 0; y < image.getHeight(); y+= sampleDivider) {
+            for (int x = 0; x < image.getWidth(); x+= sampleDivider) {
+                RGB otherColor = new RGB(image.getRGB(x,y));
+                if (maxColor.compareTo(otherColor) < 0) {
+                    maxColor = otherColor;
+                }
+            }
+        }
+        return maxColor;
+    }
+    private static int increaseContrast(int n, int amount) {
+        return increaseContrast(n,amount, 127);
+    }
+    private static int increaseContrast(int n, int amount, int mid) {
+        if (n > mid) {
+            if (n < 255-amount) {
+                n += amount;
+            } else {
+                n = 255;
+            }
+        } else {
+            if (n > amount) {
+                n -= amount;
+            } else {
+                n = 0;
+            }
+        }
+        return n;
+    }
+    private static int treatFaceValue(int n, double divider) {
+        if (n > 75*divider) return 255;
+        return 0;
     }
     public static BufferedImage convertImageTo4Level(BufferedImage originalImage) {
         int width = originalImage.getWidth();
