@@ -60,14 +60,15 @@ public class ImageWork {
     public static BufferedImage convertImageToGrayscale(BufferedImage image) {
         return convertImage(image, BufferedImage.TYPE_BYTE_GRAY);
     }
-    /* Reduces the quality of the image by limiting the number of bytes used to store RGB values */
+    /** Reduces the quality of the image by limiting the number of bytes used to store RGB values */
     public static BufferedImage convertImageToReduced(BufferedImage image) {
         return convertImage(image, BufferedImage.TYPE_USHORT_555_RGB);
     }
-    /* Reduces the image to only two colors: black and white */
+    /** Reduces the image to only two colors: black and white */
     public static BufferedImage convertImageToBinary(BufferedImage image) {
         return convertImage(image, BufferedImage.TYPE_BYTE_BINARY);
     }
+    /** Converts into black and white, making the face easier to find **/
     public static BufferedImage convertImageToFindFace(BufferedImage originalImage) {
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
@@ -208,7 +209,7 @@ public class ImageWork {
         return post;
     }
 
-    /* Quantize a component (e.g., red, green, or blue) to 2 bits (4 levels).
+    /** Quantize a component (e.g., red, green, or blue) to 2 bits (4 levels).
     *  Used in convertImageTo4Level() */
     private static int quantizeComponent(int component) {
         // Adjust the quantization as needed to create 4 levels
